@@ -22,7 +22,7 @@ tsteps <- sapply(dates, function(x) sum(rdata[rdata$date==x,"steps"], na.rm=TRUE
 barplot(tsteps, main="Total steps", xlab="date", ylab="n steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
+![](PA1_template_files/figure-html/MeanTotalNumberOfSteps-1.png) 
 
 ```r
 # 3. mean? median?
@@ -50,7 +50,7 @@ tsteps_ave <- aggregate(steps~interval, data=rdata, FUN=mean, na.action=na.omit)
 plot(tsteps_ave, main="Average steps during the day", xlab="interval", ylab="average steps over time", type = 'l')
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
+![](PA1_template_files/figure-html/AverageDaily-1.png) 
 
 ```r
 # 2. when was the maximum?
@@ -87,7 +87,7 @@ ttsteps <- sapply(dates, function(x) sum(d[d$date==x,"steps"]))
 barplot(ttsteps, main="Total steps", xlab="date", ylab="n steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+![](PA1_template_files/figure-html/ImputingMissingValue-1.png) 
 
 ```r
 ttotal_steps = aggregate(steps~date, data=rdata, FUN=sum, na.action=na.omit)
@@ -119,4 +119,4 @@ ggplot(data=d, aes(x=interval, y=steps)) +
   facet_wrap(~weekend, nrow=2)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
+![](PA1_template_files/figure-html/WeekdayDifference-1.png) 

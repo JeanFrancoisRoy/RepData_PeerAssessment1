@@ -1,14 +1,14 @@
 ---
 title: 'Reproducible Research: Peer Assessment 1'
 output:
-  pdf_document: default
   html_document:
     keep_md: yes
+  pdf_document: default
 ---
 
 
 ## Loading and preprocessing the data
-```{r}
+```{r Loading}
 # 1.load data
 rdata <- read.csv("activity.csv")  
 # 2.process/transmform...hum no
@@ -18,7 +18,7 @@ rdata$interval <- as.numeric(rdata$interval)
 ```
 
 ## What is mean total number of steps taken per day?
-```{r}
+```{r MeanTotalNumberOfSteps}
 # get a list of each date
 dates <- levels(factor(rdata$date))
 # 1.calculate and 2.barchart the number of steps taken per day
@@ -30,7 +30,7 @@ median(tsteps)
 ```
 
 ## What is the average daily activity pattern?
-```{r}
+```{r AverageDaily}
 # 1. time series of average number of steps taken
 intervals <- levels(factor(rdata$interval))
 tsteps_ave <- aggregate(steps~interval, data=rdata, FUN=mean, na.action=na.omit)
@@ -41,7 +41,7 @@ tsteps_ave[maxatindex,]
 ```
 
 ## Imputing missing values
-```{r}
+```{r ImputingMissingValue}
 # 1. number of missing values
 sum(is.na(rdata$steps))
 # 2. filling in all of the missing values in the dataset
@@ -60,7 +60,7 @@ median(ttotal_steps$steps)
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+```{r WeekdayDifference}
 # 1. Create new factor weekday and weekend
 d$weekend <- chron::is.weekend(d$date)
 d$weekend <- factor(d$weekend, levels=c(TRUE,FALSE), labels=c('weekend','weekday'))
