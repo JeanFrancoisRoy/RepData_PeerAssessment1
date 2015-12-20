@@ -26,42 +26,29 @@ barplot(tsteps, main="Total steps", xlab="date", ylab="n steps")
 
 ```r
 # 3. mean? median?
-mean(tsteps)
+start_mean <- mean(tsteps)
+start_median <- median(tsteps)
 ```
-
-```
-## [1] 9354.23
-```
-
-```r
-median(tsteps)
-```
-
-```
-## [1] 10395
-```
+For this first section, simply ignoring NA values, the mean total number of steps taken per day is 9354.23 and the median is 10395.
 
 ## What is the average daily activity pattern?
 
 ```r
 # 1. time series of average number of steps taken
 intervals <- levels(factor(rdata$interval))
-tsteps_ave <- aggregate(steps~interval, data=rdata, FUN=mean, na.action=na.omit)
-plot(tsteps_ave, main="Average steps during the day", xlab="interval", ylab="average steps over time", type = 'l')
+steps_ave <- aggregate(steps~interval, data=rdata, FUN=mean, na.action=na.omit)
+plot(steps_ave, main="Average steps during the day", xlab="interval", ylab="average steps over time", type = 'l')
 ```
 
 ![](PA1_template_files/figure-html/AverageDaily-1.png) 
 
 ```r
 # 2. when was the maximum?
-maxatindex <- which(tsteps_ave$steps == max(tsteps_ave$steps, na.rm = TRUE))
-tsteps_ave[maxatindex,]
+maxatindex <- which(steps_ave$steps == max(steps_ave$steps, na.rm = TRUE))
+sample_max <- steps_ave[maxatindex,]
 ```
 
-```
-##     interval    steps
-## 104      835 206.1698
-```
+The most active interval of the day overall is 835 with an average number of steps of 206.1698.
 
 ## Imputing missing values
 
@@ -75,36 +62,36 @@ sum(is.na(rdata$steps))
 ```
 
 ```r
-# 2. filling in all of the missing values in the dataset
+# 2. filling in all of the missing values in the dataset with the average of the corresponding interval
 d <- rdata
 for(i in 1:length(d$steps))
 {
   d$steps[i] <- if(!is.na(d$steps[i])) d$steps[i] else
-    {tsteps_ave$steps[which(tsteps_ave$interval == d$interval[i])]}
+    {steps_ave$steps[which(steps_ave$interval == d$interval[i])]}
 }
 # 4. histogram? mean? median?
-ttsteps <- sapply(dates, function(x) sum(d[d$date==x,"steps"]))
-barplot(ttsteps, main="Total steps", xlab="date", ylab="n steps")
+new_tsteps <- sapply(dates, function(x) sum(d[d$date==x,"steps"]))
+barplot(new_tsteps, main="Total steps", xlab="date", ylab="n steps")
 ```
 
 ![](PA1_template_files/figure-html/ImputingMissingValue-1.png) 
 
 ```r
-ttotal_steps = aggregate(steps~date, data=rdata, FUN=sum, na.action=na.omit)
-mean(ttotal_steps$steps)
+#ttotal_steps = aggregate(steps~date, data=rdata, FUN=sum, na.action=na.omit)
+new_mean <- mean(new_tsteps)
+new_median <- median(new_tsteps)
 ```
 
-```
-## [1] 10766.19
-```
+For this modified dataset section, changing NA with avearage for the corresponding interval, the new values for mean total number of steps taken per day is 10766.19 and the median is 10766.19.
 
-```r
-median(ttotal_steps$steps)
-```
 
 ```
-## [1] 10765
+##           mean   median
+## start  9354.23 10395.00
+## new   10766.19 10766.19
 ```
+
+New values are different then start values for mean and median. The median is relatively close but mean has increased, indeed, because more data has been added when replacing all missing entries.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -120,3 +107,6 @@ ggplot(data=d, aes(x=interval, y=steps)) +
 ```
 
 ![](PA1_template_files/figure-html/WeekdayDifference-1.png) 
+
+Yes, there are differences in activity patterns between weekdays and weekends.
+The person is starting later to become active during weekend probably because he sleeps more, also his most active interval is in the aftrnoon compared to the morning during weekday.
