@@ -77,7 +77,6 @@ barplot(new_tsteps, main="Total steps", xlab="date", ylab="n steps")
 ![](PA1_template_files/figure-html/ImputingMissingValue-1.png) 
 
 ```r
-#ttotal_steps = aggregate(steps~date, data=rdata, FUN=sum, na.action=na.omit)
 new_mean <- mean(new_tsteps)
 new_median <- median(new_tsteps)
 ```
@@ -99,9 +98,10 @@ New values are different then start values for mean and median. The median is re
 # 1. Create new factor weekday and weekend
 d$weekend <- chron::is.weekend(d$date)
 d$weekend <- factor(d$weekend, levels=c(TRUE,FALSE), labels=c('weekend','weekday'))
+dday <- aggregate(steps~interval+weekend, data=d, FUN=mean)
 # 2. panel plot containing time series plot of interval
 library(ggplot2)
-ggplot(data=d, aes(x=interval, y=steps)) +
+ggplot(data=dday, aes(x=interval, y=steps)) +
   geom_line() + ylab("Number of steps") +
   facet_wrap(~weekend, nrow=2)
 ```
@@ -109,4 +109,4 @@ ggplot(data=d, aes(x=interval, y=steps)) +
 ![](PA1_template_files/figure-html/WeekdayDifference-1.png) 
 
 Yes, there are differences in activity patterns between weekdays and weekends.
-The person is starting later to become active during weekend probably because he sleeps more, also his most active interval is in the aftrnoon compared to the morning during weekday.
+The person starts slower during weekend probably because he sleeps more, also he is generally more active for the rest of the day and finally stops a little bit later.
